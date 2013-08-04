@@ -102,11 +102,11 @@ def get_diods_state(filepath, save_processed_image=''):
 def take_photo(filepath):
 	
     command = "raspistill -o %s -t 0" % filepath
-    subprocess.call(command % now, shell=True)
+    subprocess.call(command , shell=True)
 
 def get_machine_state(dirname):
 	now = str(int(time.time()))
-	filename = os.path.join(dirname, "%s.jpg" % now)
+	filepath = os.path.join(dirname, "%s.jpg" % now)
 	
 	take_photo(filepath)
 	diods_state = get_diods_state(filepath, save_processed_image="%s")
@@ -125,7 +125,7 @@ def delete_old_files(dirname, since=3600):
 	for f in files:
 		r = re.search('(\d{10}).jpg', f)
 		if not r:
-			countinue
+			continue
 
 		dt = r.groups()[0]
 		if int(dt) < delete_till:
@@ -134,11 +134,12 @@ def delete_old_files(dirname, since=3600):
 def main():
 	
 	args = sys.argv
+	print args
 	if args[1] == 'process_dir':
 		process_dir(args[2])
 	elif args[1] == 'get_machine_state':
 		get_machine_state(args[2])
-	elif args[1] = 'delete_old_files':
+	elif args[1] == 'delete_old_files':
 		delete_till = len(args) > 3 and int(args[3]) or 3600
 		delete_old_files(args[2], delete_till)
 
