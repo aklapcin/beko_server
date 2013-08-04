@@ -3,6 +3,9 @@ import cv2
 import os
 import sys
 import numpy as np
+import time
+import subprocess
+import re
 
 def save_image(filename, dirname, image):
 	filepath = os.path.join(dirname, filename)
@@ -62,42 +65,82 @@ def find_diods_contours(counturs):
 
 	return result
 		
-
-
-def get_diods_state(dirname):
+def process_dir(dirname):
 	files = os.listdir(dirname)
 
 	for f in files:
-		filename = os.path.join(dirname, f)
+		filepath = os.path.join(dirname, f)
 		if '_' in f:
-			os.remove(filename)
+			os.remove(filepath)
 			continue
-		print f
-		
-		if not os.path.isfile(filename):
+		if not os.path.isfile(filepath):
 			continue
-		image = cv2.imread(filename)
+		get_diods_state(filepath, save_processed_image="processed_%s")
+
+def get_diods_state(filepath, save_processed_image=''):
+
+	image = cv2.imread(filepath)
+	
+	diods_on = find_ON_diods(image)
+	diods_off = find_OFF_diods(image, f, dirname)
+
+	diod_state_pos = [(d[1], True) for d in diods_on]
+	diod_state_pos.extend([(d[1], False) for d in diods_off])
+
+	diod_state_pos.sort()
+	
+	if save_processed_image:
+		filename = os.path.split(filepath)[1]
+		filename = save_processed_image % filename
+		save_image(filename, dirname, image)		
+	
+	return diod_state_pos
+	#for i in range(len(diod_state_pos)):
+	#	print "Diod %s: %s" % (i+1, diod_state_pos[i][1] and "ON" or "OFF")
 		
-		diods_on = find_ON_diods(image)
-		diods_off = find_OFF_diods(image, f, dirname)
+	
+def take_photo(filepath):
+	
+    command = "raspistill -o %s -t 0" % filepath
+    subprocess.call(command % now, shell=True)
 
-		diod_state_pos = [(d[1], True) for d in diods_on]
-		diod_state_pos.extend([(d[1], False) for d in diods_off])
+def get_machine_state(dirname):
+	now = str(int(time.time()))
+	filename = os.path.join(dirname, "%s.jpg" % now)
+	
+	take_photo(filepath)
+	diods_state = get_diods_state(filepath, save_processed_image="%s")
+	
+	record_file = os.path.join(dirname, 'record')
+	r_f = open(record_file, 'a')
+	record = ['ON' if x[1] else 'OFF' for x in diods_state].join(',') + ", %s" % now
+	r_f.write(record + "\n")
+	r_f.close()
 
-		diod_state_pos.sort()
+def delete_old_files(dirname, since=3600):
+	delete_till = int(time.time()) - 3600
 
-		for i in range(len(diod_state_pos)):
-			print "Diod %s: %s" % (i+1, diod_state_pos[i][1] and "ON" or "OFF")
-			
-		save_image("circles_%s" % f, dirname, image)		
-		
+	files = os.listdir(dirname)
 
+	for f in files:
+		r = re.search('(\d{10}).jpg', f)
+		if not r:
+			countinue
+
+		dt = r.groups()[0]
+		if int(dt) < delete_till:
+			os.remove(os.path.join(dirname, f))
+	
 def main():
 	
 	args = sys.argv
-	
-	if args[1] == 'make_grey':
-		get_diods_state(args[2])
+	if args[1] == 'process_dir':
+		process_dir(args[2])
+	elif args[1] == 'get_machine_state':
+		get_machine_state(args[2])
+	elif args[1] = 'delete_old_files':
+		delete_till = len(args) > 3 and int(args[3]) or 3600
+		delete_old_files(args[2], delete_till)
 
 if __name__ == '__main__':
 	main()
