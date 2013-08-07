@@ -1,0 +1,16 @@
+Flask==0.10.1
+Flask-Psycopg2==1.2
+Flask-SQLAlchemy==1.0
+Jinja2==2.7
+MarkupSafe==0.18
+SQLAlchemy==0.8.2
+Tempita==0.5.1
+Werkzeug==0.9.3
+argparse==1.2.1
+decorator==3.4.0
+ipython==0.13.2
+itsdangerous==0.22
+numpy==1.7.1
+psycopg2==2.5.1
+sqlalchemy-migrate==0.7.2
+wsgiref==0.1.2
