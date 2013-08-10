@@ -7,6 +7,7 @@ import time
 import subprocess
 import re
 import math
+import time
 
 class Point(object):
 	def __init__(self, x, y):
@@ -45,7 +46,7 @@ class MachineState(object):
 	STATES_NAMES = STATES.keys()
 	STATES_NAMES.extend(['UNKNOWN', 'OFF'])
 
-	DIODS_DISTANCE = Point(36, 230)
+	DIODS_DISTANCE = Point(9, 220)
 
 	def __init__(self, diods_state, filename, calculate=False):
 		self.diods_state = []
@@ -102,7 +103,7 @@ class MachineState(object):
 			print "removing bad diod i=%s current diod is at %s %s, next is at %s %s" %\
 					(i, c_diod.center.x, c_diod.center.y, next_diod.center.x, next_diod.center.y)
 				
-			self.diods_state.remove(i+1)
+			del self.diods_state[i+1]
 			i += 1
 		
 		if len(self.diods_state) == 5:
@@ -138,8 +139,9 @@ def find_ON_diods(image, dirname=None, filename=None):
 
 
 	diod_contours = find_diods_contours(contours)
-	for d_c in diod_contours:
-		cv2.circle(image, d_c[0], d_c[1], cv.RGB(0,255,0), 10)
+	#for d_c in diod_contours:
+	#	cv2.circle(image, d_c[0], d_c[1], cv.RGB(0,255,0), 10)
+	#	print "Found on diod %s %s" % (d_c[0], d_c[1])
 
 	return [d[0] for d in diod_contours]
 	
@@ -150,13 +152,17 @@ def find_OFF_diods(image, dirname=None, filename=None):
 		save_image("red_%s" % filename, dirname, red)
 	
 	element = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(3,3))
-	val, thr = cv2.threshold(red, 8., 255, cv.CV_THRESH_BINARY)
+	red_eq = cv2.equalizeHist(red)
+	if dirname and filename:
+		save_image("red_eq_%s" % filename, dirname, red_eq)
+	val, thr = cv2.threshold(red_eq, 110, 255, cv.CV_THRESH_BINARY)
+	thr_er = cv2.erode(thr, element, iterations=3)
 	if dirname and filename:
 		save_image("off_thr_%s" % filename, dirname, thr)
 	
 	#save_image("thr_%s" % filename, dirname, thr)
-	di = cv2.dilate(thr, element, iterations=15)
-	er = cv2.erode(di, element, iterations=20)
+	di = cv2.dilate(thr_er, element, iterations=10)
+	er = cv2.erode(di, element, iterations=10)
 	if dirname and filename:
 		save_image("off_erode_%s" % filename, dirname, er)
 	
@@ -165,6 +171,7 @@ def find_OFF_diods(image, dirname=None, filename=None):
 	diod_contours = find_diods_contours(contours)
 	for d_c in diod_contours:
 		cv2.circle(image, d_c[0], d_c[1], cv.RGB(255,0,0), 10)
+		print "Found off diod %s %s" % (d_c[0], d_c[1])
 
 	return [d[0] for d in diod_contours]
 	
@@ -177,8 +184,9 @@ def find_diods_contours(counturs):
 		almost_circle = abs(size[0] - size[1]) < max(size) * 0.3
 		
 		double_r = cv.Round(sum(size) * 0.5)
-		good_size = double_r < 150 and double_r > 110
+		good_size = double_r < 150 and double_r > 90
 		if not (almost_circle and good_size):
+			print "Dropping double_r = %s, center= %s %s sizes = %s %s" % (double_r, center[0], center[1], size[0], size[1])
 			continue
 		print "double_r = %s, center= %s %s sizes = %s %s" % (double_r, center[0], center[1], size[0], size[1])
 		
@@ -202,7 +210,7 @@ def process_dir(dirname, save_state_to_file=True):
 		filepath = os.path.join(dirname, f)
 		if not os.path.isfile(filepath):
 			continue
-		diods_state = get_diods_state(filepath, save_processed_image="processed_%s")
+		diods_state = get_diods_state(filepath, dirname, save_processed_image="processed_%s")
 		machine_state = MachineState(diods_state, filepath, calculate=True)
 		print filepath, machine_state.state
 
@@ -210,13 +218,13 @@ def process_dir(dirname, save_state_to_file=True):
 			record_diods_state(machine_state, dirname)
 
 
-def get_diods_state(filepath, save_processed_image=''):
+def get_diods_state(filepath, datadir, save_processed_image=''):
 
 	image = cv2.imread(filepath)
 	print "processing %s" % filepath
 	dirname, filename =os.path.split(filepath)
-	diods_on = find_ON_diods(image, dirname=dirname, filename=filename)
-	diods_off = find_OFF_diods(image, dirname=dirname, filename=filename)
+	diods_on = find_ON_diods(image, dirname=datadir, filename=filename)
+	diods_off = find_OFF_diods(image, dirname=datadir, filename=filename)
 
 	diod_state_pos = [(d[1], d, True) for d in diods_on]
 	diod_state_pos.extend([(d[1], d, False) for d in diods_off])
@@ -224,9 +232,9 @@ def get_diods_state(filepath, save_processed_image=''):
 	diod_state_pos.sort()
 	diod_state_pos = [x[1:] for x in diod_state_pos]
 	
-	if save_processed_image:
-		filename = save_processed_image % filename
-		save_image(filename, dirname, image)		
+	#if save_processed_image:
+	#	filename = save_processed_image % filename
+	#	save_image(filename, dirname, image)		
 	
 	return diod_state_pos
 	#for i in range(len(diod_state_pos)):
@@ -234,19 +242,24 @@ def get_diods_state(filepath, save_processed_image=''):
 		
 	
 def take_photo(filepath):
-	
-    command = "raspistill -o %s -t 0" % filepath
-    subprocess.call(command , shell=True)
+	print "taking photo to %s" % filepath
+	command = "raspistill -o %s" % filepath
+	subprocess.call([command], shell=True)
+	#a = os.system(command)
+	#print a
+	#print "waiting 30 seconds"
+	#time.sleep(30)
 
-def get_machine_state(dirname, save_state_to_file=True):
+def get_machine_state(dirname, tmpfs_dir, save_state_to_file=True):
 	now = str(int(time.time()))
-	filepath = os.path.join(dirname, "%s.jpg" % now)
+	filepath = os.path.join(tmpfs_dir, "%s.jpg" % now)
 	
 	take_photo(filepath)
-	diods_state = get_diods_state(filepath, save_processed_image="%s")
-	machine_state = MachineState(diods_state, filename, calculate=True)
+	diods_state = get_diods_state(filepath, dirname, save_processed_image="%s")
+	machine_state = MachineState(diods_state, filepath, calculate=True)
 	if save_state_to_file:
 		record_diods_state(machine_state, dirname)
+	os.remove(filepath)
 
 def record_diods_state(machine_state, dirname):
 	
@@ -277,7 +290,7 @@ def main():
 	if args[1] == 'process_dir':
 		process_dir(args[2])
 	elif args[1] == 'get_machine_state':
-		get_machine_state(args[2])
+		get_machine_state(args[2], args[3])
 	elif args[1] == 'delete_old_files':
 		delete_till = len(args) > 3 and int(args[3]) or 3600
 		delete_old_files(args[2], delete_till)
