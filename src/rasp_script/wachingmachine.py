@@ -38,7 +38,7 @@ class MachineState(object):
         STATES.RINSING: [False, False, True, False, False],
         STATES.SPINING: [False, False, False, True, False]}
 
-    DIODS_DISTANCE = Point(36, 230)
+    DIODS_DISTANCE = Point(9, 220)
 
     def __init__(self, diods_state, filename, calculate=False):
         self.diods_state = []

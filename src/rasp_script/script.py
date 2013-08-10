@@ -12,14 +12,14 @@ import urllib
 from common_pralka.states import WashingMachineStates
 
 
-def get_machine_state(dirname, save_state_to_file=False, server_url=None, api_token=None):
+def get_machine_state(dirname, tmpfs_dir, save_state_to_file=False, server_url=None, api_token=None):
 	''' Does everything. Takes a photo of diods, analyze it to get 
 	state of diods. Get state of washing machine and sends it to api'''
 	now = str(int(time.time()))
-	filepath = os.path.join(dirname, "%s.jpg" % now)
+	filepath = os.path.join(tmpfs_dir, "%s.jpg" % now)
 	
 	take_photo(filepath)
-	diods_state = get_diods_state(filepath, save_processed_image="")
+	diods_state = get_diods_state(filepath, dirname, save_processed_image="")
 	machine_state = MachineState(diods_state, filename, calculate=True)
 	if save_state_to_file:
 		record_diods_state(machine_state, dirname)
@@ -28,6 +28,7 @@ def get_machine_state(dirname, save_state_to_file=False, server_url=None, api_to
 			url = "http://%s/api/device/1/update_state/?state=%s&token=%s" %\
 				(server_url, machine_state.state,  api_token)
 			urllib.urlopen(url)
+	os.remove(filepath)
 
 def record_diods_state(machine_state, dirname):
 	'''save state of diods in file'''
@@ -51,7 +52,7 @@ def process_dir(dirname, save_state_to_file=True):
 		filepath = os.path.join(dirname, f)
 		if not os.path.isfile(filepath):
 			continue
-		diods_state = get_diods_state(filepath, save_processed_image="processed_%s")
+		diods_state = get_diods_state(filepath, dirname, save_processed_image="processed_%s")
 		machine_state = MachineState(diods_state, filepath, calculate=True)
 		print filepath, machine_state.state
 
@@ -81,10 +82,11 @@ def main():
 		process_dir(args[2])
 	elif args[1] == 'get_machine_state':
 		directory = args[2]
-		if len(args) >= 5:
-			server_url = args[3]
-			api_token = args[4]
-		get_machine_state(directory, server_address=server_url, api_token=api_token)
+		if len(args) >= 6:
+			tmpfs_dir = args[3]
+			server_url = args[4]
+			api_token = args[5]
+		get_machine_state(directory, tmpfs_dir, server_address=server_url, api_token=api_token)
 	elif args[1] == 'delete_old_files':
 		delete_till = len(args) > 3 and int(args[3]) or 3600
 		delete_old_files(args[2], delete_till)
