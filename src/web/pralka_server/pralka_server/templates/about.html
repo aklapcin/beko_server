@@ -1,0 +1,57 @@
+{%extends "skeleton.html"%}
+{%block main%}
+    
+    <div class="row">
+            <div class="span12">
+                <div class="page-header">
+                    <h1>About Tweeting Pralka </h1>
+                </div>  
+            </div>  
+            <div class="col-lg-8">
+                <div class="entry">
+                    <div class="entry-header">
+                        <h1 class="entry-title">Why</h1>
+                    </div>  
+                    <div class="timestamp">Written by Ola. Published on 10th August, 2013.</div>
+                    
+                    <p>The easiest answer is: to answer a joke. I am a girl. A girl who code. Because of that from time to time I hear one joke: 
+                    </p>
+
+                    <p class='cit'>
+                        Want your girlfriend to star programming?<br>
+                        Buy her a washing machine.
+                    </p>
+
+                    <p>So I've decided to show that programing a washing machine can be quite interesting task. You only need Raspberry Pi and you can do anything. Make your washing machine tweeting, get monthly statistics about numbers of washing cycles, or send you an email with notification that washing powder is just about to finish. The border is your imagination. 
+
+                    <p>What is also important, it is a great project to learn. You need to get Rasberry Pi running, connect it to machine, process input. You need to design whole inrastructure. Choose which libraries and platforms you will use, maybe try out something new.</p>
+
+                    <p>And there is one last reason I'ce done this project. Isn't internet connected washing machine just (super-geeky-nerdy-)cool?</p>
+
+                    <p>Btw, pralka is Polish for washing machine. One of not many words, which are shorter in Polish.</p>
+                </div>
+                
+
+                <div class="entry">
+                    <div class="entry-header">
+                        <h1 class="entry-title">Technology</h1>
+                    </div>  
+                    <p>Code of Tweeting Pralka can be found on <a href="https://github.com/aklapcin/beko_server/">github</a></p>
+
+                    <p>Project consist of two components(both written in Python):</p>
+                    <ul>
+                        <li>Script running on Raspebbry Pi</li>
+                        <li>Web application written in Flask</li>
+                    </ul>
+
+                    <p>Script running on Raspberry, is run from cron. Every 5 minuts it takes a photo of washing machine diods. Using OpenCV it detects which diods are on and off. Based on it decided about state of washing machine. Then it calls web application api which is responsible for rest of processing.</p>
+
+                    <p>Web application collects information about changing state of washing machine. When it detects change of machine state it sends tweets.</p>
+                 
+                </div>
+                
+            </div>
+            
+        </div>
+        
+{%endblock%}

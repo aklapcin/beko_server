@@ -1,0 +1,55 @@
+form #loading {
+	width:32px;
+	height:32px;
+	background-image:url(../images/misc/loading.gif);
+	display:block;
+	position:absolute;
+	bottom:16px;
+	display:none;
+}
+#errors {
+	border:solid 1px #E58E8E;
+	padding:10px;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	border-radius:4px;
+	background:#FFE6E6;
+	display:block;
+	display:none;
+}
+
+#errors li {
+	padding:2px;
+	list-style:none;	
+}
+
+#errors li:before {
+	content: ' - ';	
+}
+
+#errors #info {
+	font-weight:bold;
+}
+
+#errors #info:before {
+	content: '';	
+}
+
+#success {
+	border:solid 1px #83D186;
+	padding:25px 10px;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	border-radius:4px;
+	background:#D3EDD3;
+	font-weight:bold;
+	display:block;
+	display:none;
+}
+
+#errors.visible, #success.visible {
+	display:block;	
+}
+
+
+

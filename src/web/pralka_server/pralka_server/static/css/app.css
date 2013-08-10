@@ -1,0 +1,179 @@
+/*-----------------------------------
+
+Design Studio: eAM Developers LLC
+Developer:     Joseph (@JWChiwa)
+Website:       www.eamdevelopers.com 
+
+-----------------------------------*/
+body {
+	background: url(../img/light_wool.png) repeat;
+}
+header {
+	margin: 40px 0 30px 0; /*trbl*/
+	height: 90px;
+	background-color: #f3f3f3;
+	background: url(../img/navbar.png);
+	
+	/*background-image: url(../img/m-down.gif), url(../img/m-up.gif),  url(../img/tex2res5.png);*/
+	/*background-repeat: repeat-x, repeat-x, repeat;*/
+	background-position: top, bottom;
+}
+h1, h2, h3, h4 , h5, h6 {
+	font-family: 'Droid Sans', sans-serif;
+	text-shadow: 0 1px 1px #F7F7F7;
+}
+hr.h-edge {
+  margin: 18px 0;
+  border: 0;
+  border-top: 1px solid #ffffff;
+  border-bottom: 1px solid #eeeeee;
+  height: 15px;
+  background: url(../img/m-up.gif) top repeat-x;
+}
+.logo{
+	padding: 0;
+	margin-top: -35px;
+	position: absolute;
+	background:url(../img/pralka-logo.png);
+}
+.logo/*,.logo img*/{
+	width:150px;
+	height:149px;
+}
+.logo img {
+	display:none;
+}
+.nav {
+	position: relative;
+	margin-top:25px;
+	font-size: 13px;
+}
+.navbar{
+	background-color: transparent;
+}
+.navbar .nav > li  {
+	margin-left: 5px;
+}
+.navbar .nav > li > a {
+	text-transform: uppercase;
+	font-family: 'Droid Sans', sans-serif;
+	color: #555;
+}
+.navbar .nav > li > a:hover {
+	background-color: transparent;
+	color: #d5d5d5;
+	
+	background: url(../img/nav-bg.png) repeat;
+	text-decoration: none;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px; 
+}
+.navbar .nav .active > a,
+.navbar .nav .active > a:hover {
+	color: #d5d5d5;
+	text-decoration: none;
+	
+	background: url(../img/nav-bg.png) repeat;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px; 
+}
+.home-unit{
+	background-image :url(../img/pralka_home.png);
+	background-repeat: false;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	height: 350px;
+	margin-bottom: 30px;
+}
+.home-unit img, .hi-unit img, nav ul li a  {
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+.home-unit img {
+	
+    background-color: #CCC;
+
+}
+.hi-unit img {
+	height: 150px;
+	width: 300px;
+	margin-bottom: 10px;
+	background-color: #CCC;
+}
+.sd {
+	margin: 10px 0 15px 0;
+	padding-bottom: 10px;
+	border-bottom: 1px dotted #CCC;
+}
+.sd:last-child {
+	border-bottom: none;
+}
+.sd h3 {
+	border-bottom: 2px solid #999;
+	margin-bottom: 10px;
+}
+.entry {
+	margin-bottom: 20px;
+}
+.entry:hover h2.entry-title a {
+	color: #5FBDCE;
+}
+.entry:hover .btn {
+  color: #333333;
+  text-decoration: none;
+  background-color: #e6e6e6;
+  background-position: 0 -15px;
+  -webkit-transition: background-position 0.1s linear;
+  -moz-transition: background-position 0.1s linear;
+  -ms-transition: background-position 0.1s linear;
+  -o-transition: background-position 0.1s linear;
+  transition: background-position 0.1s linear;
+}
+h1.entry-title {
+	margin-bottom: 0px;
+} 
+h2.entry-title, .respond h3 {
+	margin-bottom: 5px;
+}
+h1.entry-title, h2.entry-title {
+	line-height: 28px;
+	color: #333;
+	font-size: 25px;
+	text-transform: none;
+}
+h1.entry-title, h2.entry-title a {
+	color: #333;
+	text-decoration: none;
+}
+.timestamp {
+	margin: 0;
+	color: #666;
+	font-style: italic;
+	margin-bottom: 10px;
+}
+.entry-header {
+	padding-bottom: 17px;
+	margin: 18px 0;
+	border-bottom: 1px solid #EEE;
+}
+
+.home-text{
+
+	font-family: 'Droid Sans', sans-serif;
+	text-shadow: 0 3px 3px #123456;
+	font-size: 100px;
+	line-height: 120px;
+	font-style: bold;
+	color: #E6E6E6;
+	padding-top: 80px;
+	text-align:center;
+}
+
+.cit {
+	font-style: italic;
+	margin-left: 20px;
+}

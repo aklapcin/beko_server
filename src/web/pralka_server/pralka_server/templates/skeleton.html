@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+    <meta charset="utf-8">
+    <title>Tweeting Washing Machine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+        
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+        
+    <!-- [if lt IE 9] >
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <! [endif] -->  
+        
+    <!-- favicon and touch icons -->
+    <link rel="short icon" href="/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/apple-touch-icon-72x72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/apple-touch-icon-114x114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/apple-touch-icon-144x144-precomposed.png">
+    
+    <link href="http://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet" >   
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="pull-left">
+                <a href="." alt="" title="" class="logo">
+                    <img src="static/img/pralka-logo.png" alt="logo">
+                </a>
+            </div>
+        
+            <div class="navbar pull-right">
+                <ul class="nav nav-pills">
+                    <li {%if page=='home'%}class="active"{%endif%}><a href="/">Home</a></li>
+                    <li {%if page=='about'%}class="active"{%endif%}><a href="/about">About</a></li>
+                    <li {%if page=='links'%}class="active"{%endif%}><a href="/links">Links</a></li>
+                    <li {%if page=='contact'%}class="active"{%endif%}><a href="/contact">Contact</a></li>
+                </ul>
+            </div>          
+        
+        </div>
+    </header>
+    
+    <div class="container">
+            {% block main %}
+        
+            {% endblock main %}
+        
+        <hr class="h-edge">
+        
+        <footer>
+            <p class="pull-left">&copy; Copyright eggi87 2013 </p>
+            <p class="pull-right">HTML Template(&copy; Copyright Holder 2012 Developed by <a href="http://www.eamdevelopers.com/">eAM Developers</a>)</p>
+        </footer>
+        
+    </div>
+    
+
+<!-- JS Placed at the end of the document so the pages load faster -->
+    <script src="static/js/bootstrap.js"></script>
+    <script src="static/js/jquery.js"></script>
+    
+</body>
+</html>

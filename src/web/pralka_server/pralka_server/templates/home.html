@@ -1,0 +1,58 @@
+{%extends "skeleton.html"%}
+{%block main%}
+
+
+    <div class="col-lg-12 home-unit">
+        <!--<img src="static/img/pralka_home.png" alt="image" >-->
+        <p class="home-text">
+            {%if has_device%}
+                {%if state %}
+                    {{device_name}} is now {{state}}.
+                {% else %}
+                    {{device_name}} state is not yet known.
+                {%endif%}
+            {%endif%}
+        </p>
+    </div>
+
+    
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="hi-unit">
+                <img src="static/img/pralka_thumb.png" alt="image">
+            </div>
+            <h4>Pralka (Washing Machine)</h4>
+            <p>It used to be just normal, ordinary washing machine, as those in milions of houses
+            around the world. But one day it got a special gift. Online presence and ability to tweet were give to it by raspberry pi.</p>
+            <p><a class="btn" href="/about/">View details &raquo;</a></p>
+        </div>
+        <div class="col-lg-4">
+            <div class="hi-unit">
+                <img src="static/img/raspberry.png" alt="image">
+            </div>
+            <h4>Raspberry Pi</h4>
+            <p>This tiny little computer is <a href="https://twitter.com/tweeting_pralka">@tweeting_pralka</a> social brain and eyes.
+            It detects washing machine state based on photo of its diods. And sends information to 
+            server which do all the tweeting.</p>
+            <p><a class="btn" href="/about/">View details &raquo;</a></p>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="hi-unit">
+                <img src="static/img/tweeting_thumb.png" alt="image">
+            </div>
+            <h4>Tweeting Pralka</h4>
+            <p><a href="https://twitter.com/tweeting_pralka">Tweetting Pralka</a> is a washing machine which loves tweeting. Feel free to <a href="https://twitter.com/tweeting_pralka">follow</a>.
+            Tweeting pralka also love hashtags, so it got one: <a href="https://twitter.com/search?q=%23tweetingwashingmachine">#tweetingwashingmachine</a>
+
+
+            <div class="alert">
+            <strong>Warning!</strong> Tweeting Pralka is not quite inteligent device, so expectation about its twitter feed quality should not be high.
+
+            </div>
+            
+            </p>
+            <p><a class="btn" href="/abot/">View details &raquo;</a></p>
+        </div>
+    </div>
+{%endblock%}
