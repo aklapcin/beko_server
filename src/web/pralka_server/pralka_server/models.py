@@ -15,7 +15,7 @@ class StateRecord(db.Model):
         WashingMachineStates.WASHING: [WashingMachineStates.RINSING, WashingMachineStates.SPINING],
         WashingMachineStates.RINSING: [WashingMachineStates.SPINING, WashingMachineStates.FINISHED, WashingMachineStates.OFF],
         WashingMachineStates.SPINING: [WashingMachineStates.FINISHED, WashingMachineStates.OFF],
-        WashingMachineStates.FINISHED: [WashingMachineStates.OFF, WashingMachineStates.ON]
+        WashingMachineStates.FINISHED: [WashingMachineStates.OFF, WashingMachineStates.ON, WashingMachineStates.ON, WashingMachineStates.WASHING]
     }
 
 
