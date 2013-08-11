@@ -8,11 +8,13 @@ import subprocess
 import re
 import math
 import urllib
-
 from common_pralka.states import WashingMachineStates
+from image_proc import take_photo, get_diods_state
+from wachingmachine import MachineState
 
 
-def get_machine_state(dirname, tmpfs_dir, save_state_to_file=False, server_url=None, api_token=None):
+
+def get_machine_state(dirname, tmpfs_dir, save_state_to_file=False, server_address=None, api_token=None):
 	''' Does everything. Takes a photo of diods, analyze it to get 
 	state of diods. Get state of washing machine and sends it to api'''
 	now = str(int(time.time()))
@@ -20,13 +22,13 @@ def get_machine_state(dirname, tmpfs_dir, save_state_to_file=False, server_url=N
 	
 	take_photo(filepath)
 	diods_state = get_diods_state(filepath, dirname, save_processed_image="")
-	machine_state = MachineState(diods_state, filename, calculate=True)
+	machine_state = MachineState(diods_state, filepath, calculate=True)
 	if save_state_to_file:
 		record_diods_state(machine_state, dirname)
-	if server_url is not None and api_token is not None:
+	if server_address is not None and api_token is not None:
 		if machine_state != WashingMachineStates.UNKNOWN: 
 			url = "http://%s/api/device/1/update_state/?state=%s&token=%s" %\
-				(server_url, machine_state.state,  api_token)
+				(server_address, machine_state.state,  api_token)
 			urllib.urlopen(url)
 	os.remove(filepath)
 
