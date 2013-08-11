@@ -96,7 +96,7 @@ class MachineState(object):
             print "removing bad diod i=%s current diod is at %s %s, next is at %s %s" %\
                     (i, c_diod.center.x, c_diod.center.y, next_diod.center.x, next_diod.center.y)
                 
-            self.diods_state.remove(i+1)
+            self.diods_state.pop(i+1)
             i += 1
         
         if len(self.diods_state) == 5:

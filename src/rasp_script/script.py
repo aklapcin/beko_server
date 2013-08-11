@@ -23,10 +23,11 @@ def get_machine_state(dirname, tmpfs_dir, save_state_to_file=False, server_addre
 	take_photo(filepath)
 	diods_state = get_diods_state(filepath, dirname, save_processed_image="")
 	machine_state = MachineState(diods_state, filepath, calculate=True)
+	print machine_state.record()
 	if save_state_to_file:
 		record_diods_state(machine_state, dirname)
 	if server_address is not None and api_token is not None:
-		if machine_state != WashingMachineStates.UNKNOWN: 
+		if machine_state.state != WashingMachineStates.UNKNOWN: 
 			url = "http://%s/api/device/1/update_state/?state=%s&token=%s" %\
 				(server_address, machine_state.state,  api_token)
 			urllib.urlopen(url)
