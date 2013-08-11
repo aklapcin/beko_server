@@ -12,5 +12,7 @@ ipython==0.13.2
 itsdangerous==0.22
 numpy==1.7.1
 psycopg2==2.5.1
-sqlalchemy-migrate==0.7.2
+pytz==2013b
+tweepy==2.1
+uWSGI==1.9.14
 wsgiref==0.1.2
