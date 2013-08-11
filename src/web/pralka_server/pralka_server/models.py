@@ -95,6 +95,8 @@ class Device(db.Model):
     
     def accept_new_state(self, new_record):
         last_record = self.last_record(before = new_record.timestamp)
+        if new_record.state not in StateRecord.ALLOWED_TRANSITIONS.keys():
+            return False
         if last_record is None:
             return True
         if last_record.timestamp < new_record.timestamp - datetime.timedelta(0, 60*30):
