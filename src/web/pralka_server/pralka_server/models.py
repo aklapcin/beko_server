@@ -73,7 +73,7 @@ class Device(db.Model):
     def set_token(self):
         if self.token is None:
             randint = random.getrandbits(128)
-            self.token = str(uuid.uuid(int=randint))
+            self.token = str(uuid.uuid4())
 
     def last_record(self, before=None):
         records = StateRecord.query.filter_by(device_id=self.id)
