@@ -9,7 +9,7 @@ import re
 import math
 import urllib
 from common_pralka.states import WashingMachineStates
-from image_proc import take_photo, get_diods_state
+from image_proc import take_photo, get_diods_state, save_image
 from wachingmachine import MachineState
 
 
@@ -18,20 +18,25 @@ def get_machine_state(dirname, tmpfs_dir, save_state_to_file=False, server_addre
 	''' Does everything. Takes a photo of diods, analyze it to get 
 	state of diods. Get state of washing machine and sends it to api'''
 	now = str(int(time.time()))
-	filepath = os.path.join(tmpfs_dir, "%s.jpg" % now)
+	filename = "%s.jpg" % now
+	filepath = os.path.join(tmpfs_dir, filename)
 	
 	take_photo(filepath)
 	diods_state = get_diods_state(filepath, dirname, save_processed_image="")
 	machine_state = MachineState(diods_state, filepath, calculate=True)
 	print machine_state.record()
+	os.remove(filepath)
+	
 	if save_state_to_file:
 		record_diods_state(machine_state, dirname)
+	if machine_state.state == WashingMachineStates.UNKNOWN:
+		save_image(os.path.join(dirname, filename))
 	if server_address is not None and api_token is not None:
-		if machine_state.state != WashingMachineStates.UNKNOWN: 
-			url = "http://%s/api/device/1/update_state/?state=%s&token=%s" %\
-				(server_address, machine_state.state,  api_token)
-			urllib.urlopen(url)
-	os.remove(filepath)
+		
+		url = "http://%s/api/device/1/update_state/?state=%s&token=%s" %\
+			(server_address, machine_state.state,  api_token)
+		print url
+		urllib.urlopen(url)
 
 def record_diods_state(machine_state, dirname):
 	'''save state of diods in file'''

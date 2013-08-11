@@ -23,8 +23,8 @@ def find_ON_diods(image, dirname=None, filename=None):
     val, thr = cv2.threshold(greyed, 70., 255, cv.CV_THRESH_BINARY)
     er = cv2.erode(thr, element, iterations=10)
     di = cv2.dilate(er, element, iterations=15)
-    if dirname and filename:
-        save_image("on_dilate_%s" % filename, dirname, di)
+    #if dirname and filename:
+    #    save_image("on_dilate_%s" % filename, dirname, di)
     gb = cv2.GaussianBlur(di, (5, 5), 2)
     
     contours, _ = cv2.findContours(gb, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
@@ -53,8 +53,8 @@ def find_OFF_diods(image, dirname=None, filename=None):
     #save_image("thr_%s" % filename, dirname, thr)
     di = cv2.dilate(thr, element, iterations=10)
     er = cv2.erode(di, element, iterations=12)
-    if dirname and filename:
-        save_image("off_erode_%s" % filename, dirname, er)
+    #if dirname and filename:
+    #    save_image("off_erode_%s" % filename, dirname, er)
     
     contours, _ = cv2.findContours(er, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 

@@ -32,11 +32,12 @@ class DiodState(object):
 class MachineState(object):
     STATES = WashingMachineStates
     STATES_DIODS = {
-        STATES.ON: [True, False, False, False, False],
-        STATES.FINISHED: [True, False, False, False, True],
-        STATES.WASHING: [True, True, False, False, False],
-        STATES.RINSING: [False, False, True, False, False],
-        STATES.SPINING: [False, False, False, True, False]}
+        STATES.OFF: [[False, False, False, False, False]],
+        STATES.ON: [[True, False, False, False, False]],
+        STATES.FINISHED: [[True, False, False, False, True]],
+        STATES.WASHING: [[True, True, False, False, False], [False, True, False, False, False]],
+        STATES.RINSING: [[False, False, True, False, False]],
+        STATES.SPINING: [[False, False, False, True, False]]}
 
     DIODS_DISTANCE = Point(22, 210)
 
@@ -61,10 +62,11 @@ class MachineState(object):
             self.state = self.STATES.UNKNOWN
             return
         print self.diods_on_state
-        for state_name, diods_on in self.STATES_DIODS.items():
-            if self.diods_on_state == diods_on: 
-                self.state = state_name
-                break
+        for state_name, diods_on_table in self.STATES_DIODS.items():
+            for diods_on in diods_on_table:
+	    	if self.diods_on_state == diods_on:
+		    self.state = state_name
+		    break
         
     @property
     def diods_on_state(self):
