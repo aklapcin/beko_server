@@ -10,7 +10,8 @@ import math
 import urllib
 
 from common_pralka.states import WashingMachineStates
-
+from wachingmachine import MachineState
+from image_proc import get_diods_state
 
 def get_machine_state(dirname, tmpfs_dir, save_state_to_file=False, server_url=None, api_token=None):
 	''' Does everything. Takes a photo of diods, analyze it to get 

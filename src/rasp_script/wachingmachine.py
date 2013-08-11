@@ -1,7 +1,7 @@
 import time
 import subprocess
 import math
-from ..common_pralka.states import WashingMachineStates, DiodsStates
+from common_pralka.states import WashingMachineStates, DiodsStates
 class Point(object):
     def __init__(self, x, y):
         self.x = x
@@ -38,13 +38,13 @@ class MachineState(object):
         STATES.RINSING: [False, False, True, False, False],
         STATES.SPINING: [False, False, False, True, False]}
 
-    DIODS_DISTANCE = Point(9, 220)
+    DIODS_DISTANCE = Point(22, 210)
 
     def __init__(self, diods_state, filename, calculate=False):
         self.diods_state = []
         for d in diods_state:
             print d
-            self.diods_state.append(DiodState(d[0], d[1] and 'ON' or 'OFF'))
+            self.diods_state.append(DiodState(d[0], d[1] and DiodState.STATES.ON or DiodState.STATES.OFF))
         self.state = self.STATES.UNKNOWN
         self.filename = filename
         if calculate:
@@ -60,7 +60,7 @@ class MachineState(object):
         if not self.check_diods_ok():
             self.state = self.STATES.UNKNOWN
             return
-        
+        print self.diods_on_state
         for state_name, diods_on in self.STATES_DIODS.items():
             if self.diods_on_state == diods_on: 
                 self.state = state_name
@@ -76,6 +76,7 @@ class MachineState(object):
         while True:
             if i + 1 >= len(self.diods_state):
                 break
+
             c_diod = self.diods_state[i]
             next_diod = self.diods_state[i + 1]
             
@@ -86,7 +87,7 @@ class MachineState(object):
 
             next_next_diod_should_be = c_diod.center.moved_by([self.DIODS_DISTANCE.x * 2, self.DIODS_DISTANCE.y * 2])
             if next_diod.in_range(next_next_diod_should_be, 30):
-                missed_diod = DiodState(c_diod.x+ self.DIODS_DISTANCE.x, c_diod.y + self.DIODS_DISTANCE.y, 'UNKNOWN')
+                missed_diod = DiodState((c_diod.center.x+ self.DIODS_DISTANCE.x, c_diod.center.y + self.DIODS_DISTANCE.y), 'UNKNOWN')
                 self.diods_state.insert(i+1, missed_diod)
                 print "inserting missing diod at %s, %s"% (missed_diod.center.x, missed_diod.center.y)
                 i += 1

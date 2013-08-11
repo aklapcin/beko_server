@@ -73,7 +73,8 @@ def find_diods_contours(counturs):
         almost_circle = abs(size[0] - size[1]) < max(size) * 0.3
         
         double_r = cv.Round(sum(size) * 0.5)
-        good_size = double_r < 130 and double_r > 90
+        good_size = double_r < 150 and double_r > 85
+        
         if not (almost_circle and good_size):
             continue
         print "double_r = %s, center= %s %s sizes = %s %s" % (double_r, center[0], center[1], size[0], size[1])
@@ -98,9 +99,9 @@ def get_diods_state(filepath, datadir, save_processed_image=''):
     diod_state_pos.sort()
     diod_state_pos = [x[1:] for x in diod_state_pos]
     
-    #if save_processed_image:
-    #    filename = save_processed_image % filename
-    #    save_image(filename, dirname, image)        
+    if save_processed_image:
+        filename = save_processed_image % filename
+        save_image(filename, dirname, image)        
     
     return diod_state_pos
     #for i in range(len(diod_state_pos)):
