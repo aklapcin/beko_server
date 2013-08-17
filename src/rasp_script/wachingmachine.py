@@ -52,9 +52,6 @@ class MachineState(object):
             self.calculate_state()
 
     def calculate_state(self):
-        if len(self.diods_state) == 0:
-            self.state = self.STATES.OFF
-            return
         if len(self.diods_state) < 4:
             self.state = self.STATES.UNKNOWN
             return
